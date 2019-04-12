@@ -13,5 +13,13 @@
         <module name="video-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gy-video" target="1.8" />
+      <module name="video-common" target="1.8" />
+      <module name="video-dao" target="1.8" />
+      <module name="video-mini-api" target="1.8" />
+      <module name="video-pojo" target="1.8" />
+      <module name="video-service" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

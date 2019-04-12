@@ -1,8 +1,8 @@
 package com.shawn.video.idworker.strategy;
 
-import org.n3r.idworker.Id;
-import org.n3r.idworker.RandomCodeStrategy;
-import org.n3r.idworker.utils.Utils;
+import com.shawn.video.idworker.RandomCodeStrategy;
+import com.shawn.video.idworker.Id;
+import com.shawn.video.idworker.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

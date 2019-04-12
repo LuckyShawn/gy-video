@@ -1,12 +1,12 @@
 package com.shawn.video.idworker;
 
-import org.n3r.idworker.strategy.DefaultRandomCodeStrategy;
+import com.shawn.video.idworker.strategy.DefaultRandomCodeStrategy;
 
 public class Code {
     private static RandomCodeStrategy strategy;
 
     static {
-        RandomCodeStrategy strategy = new DefaultRandomCodeStrategy();
+        RandomCodeStrategy strategy = (RandomCodeStrategy) new DefaultRandomCodeStrategy();
         strategy.init();
         configure(strategy);
     }

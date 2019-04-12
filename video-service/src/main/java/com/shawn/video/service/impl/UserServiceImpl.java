@@ -4,6 +4,7 @@ import com.shawn.video.dao.UsersMapper;
 import com.shawn.video.idworker.Sid;
 import com.shawn.video.pojo.Users;
 import com.shawn.video.service.UserService;
+import com.shawn.video.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -36,5 +37,19 @@ public class UserServiceImpl implements UserService {
     public void saveUser(Users user) {
         user.setId(sid.nextShort());
         usersMapper.insert(user);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users login(Users user) throws Exception {
+        Users result = usersMapper.selectOne(new Users(user.getUsername()));
+        if(result==null){
+            return null;
+        }
+        if(result.getPassword().equals(MD5Utils.getMD5Str(user.getPassword()))){
+            return result;
+        }else{
+            return null;
+        }
     }
 }

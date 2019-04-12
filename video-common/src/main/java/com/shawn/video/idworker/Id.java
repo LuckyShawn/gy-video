@@ -1,6 +1,7 @@
 package com.shawn.video.idworker;
 
-import org.n3r.idworker.strategy.DefaultWorkerIdStrategy;
+
+import com.shawn.video.idworker.strategy.DefaultWorkerIdStrategy;
 
 public class Id {
     private static WorkerIdStrategy workerIdStrategy;

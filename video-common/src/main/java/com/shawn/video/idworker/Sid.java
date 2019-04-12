@@ -1,7 +1,7 @@
 package com.shawn.video.idworker;
 
-import org.n3r.idworker.strategy.DefaultWorkerIdStrategy;
-import org.n3r.idworker.utils.Utils;
+import com.shawn.video.idworker.strategy.DefaultWorkerIdStrategy;
+import com.shawn.video.idworker.utils.Utils;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;

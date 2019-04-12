@@ -15,7 +15,7 @@ public class Users {
     /**
      * 用户名
      */
-    @ApiModelProperty(value="用户名", name="username", example="imoocuser", required=true)
+    @ApiModelProperty(value="用户名", name="username", example="shawn", required=true)
     private String username;
 
     /**
@@ -61,7 +61,11 @@ public class Users {
     public Users() {
 		super();
 	}
-    
+
+	public Users(String username){
+        this.username = username;
+    }
+
     public Users(String id, String username, String password, String faceImage, String nickname, Integer fansCounts,
 			Integer followCounts, Integer receiveLikeCounts) {
 		super();

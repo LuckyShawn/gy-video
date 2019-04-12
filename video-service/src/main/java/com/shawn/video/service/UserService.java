@@ -20,4 +20,11 @@ public interface UserService {
      * @param users
      */
     void saveUser(Users users);
+
+    /**
+     * 用户登录
+     * @param users
+     * @return
+     */
+    Users login(Users users) throws Exception;
 }

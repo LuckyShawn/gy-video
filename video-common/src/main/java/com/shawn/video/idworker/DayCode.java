@@ -1,6 +1,5 @@
 package com.shawn.video.idworker;
-
-import org.n3r.idworker.strategy.DayPrefixRandomCodeStrategy;
+import com.shawn.video.idworker.strategy.DayPrefixRandomCodeStrategy;
 
 public class DayCode {
     static RandomCodeStrategy strategy;
@@ -9,7 +8,7 @@ public class DayCode {
         DayPrefixRandomCodeStrategy dayPrefixCodeStrategy = new DayPrefixRandomCodeStrategy("yyMM");
         dayPrefixCodeStrategy.setMinRandomSize(7);
         dayPrefixCodeStrategy.setMaxRandomSize(7);
-        strategy = dayPrefixCodeStrategy;
+        strategy = (RandomCodeStrategy) dayPrefixCodeStrategy;
         strategy.init();
     }
 
