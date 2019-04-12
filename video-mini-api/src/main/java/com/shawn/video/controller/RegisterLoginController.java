@@ -1,17 +1,22 @@
 package com.shawn.video.controller;
 
 import com.shawn.video.pojo.Users;
+import com.shawn.video.pojo.vo.UsersVO;
 import com.shawn.video.service.UserService;
 import com.shawn.video.utils.JSONResult;
 import com.shawn.video.utils.MD5Utils;
+import com.shawn.video.utils.RedisOperator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 /**
  * @Description TODO
@@ -20,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Api(value = "用户注册登录的接口",tags = {"注册和登录的controller"})
-public class RegisterLoginController {
+public class RegisterLoginController extends BasicController {
 
     @Autowired
     private UserService userService;
@@ -51,8 +56,24 @@ public class RegisterLoginController {
             return JSONResult.errorMsg("用户名已经存在，请换一个用户名！");
         }
         user.setPassword("");
-       return JSONResult.ok(user);
+        UsersVO usersVO = setUserRedisSessionToken(user);
+        return JSONResult.ok(usersVO);
     }
+
+    /**
+     * 将session token存入redis
+     * @param users
+     * @return
+     */
+    public UsersVO setUserRedisSessionToken(Users users){
+        String uniqueToken = UUID.randomUUID().toString();
+        redis.set(USER_REDIS_SESSION + ":" + users.getId(),uniqueToken,1000 * 60 * 30);
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(users,usersVO);
+        usersVO.setUserToken(uniqueToken);
+        return usersVO;
+    }
+
 
     @ApiOperation(value = "用户登录接口", notes = "用于用户登录")
     @PostMapping("/login")
@@ -65,9 +86,22 @@ public class RegisterLoginController {
 
         //2.匹配用户名密码
         Users result = userService.login(user);
+        if(result == null){
+            return JSONResult.errorMsg("用户名或密码不正确！");
+        }
         result.setPassword("");
-        return result!=null?JSONResult.ok(result):JSONResult.errorMsg("用户名或密码不正确！");
+        UsersVO usersVO = setUserRedisSessionToken(result);
+        return result!=null?JSONResult.ok(usersVO):JSONResult.errorMsg("用户名或密码不正确！");
     }
+
+    @ApiOperation(value = "用户注销接口", notes = "用于注销登录")
+    @ApiImplicitParam(name="userId",value = "用户id",required = true,dataType = "String",paramType = "query")
+    @PostMapping("/logout")
+    public JSONResult logout(String userId) throws Exception {
+        redis.del(USER_REDIS_SESSION + ":" + userId);
+        return JSONResult.ok("注销成功");
+    }
+
 
     /**
      * 判断用户名密码不为空
