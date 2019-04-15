@@ -27,4 +27,18 @@ public interface UserService {
      * @return
      */
     Users login(Users users) throws Exception;
+
+    /**
+     * 修改用户信息
+     * @param user
+     */
+    void updateUserInfo(Users user);
+
+
+    /**
+     * 查询用户信息
+     * @param userId
+     * @return
+     */
+    Users queryUserInfo(String userId);
 }

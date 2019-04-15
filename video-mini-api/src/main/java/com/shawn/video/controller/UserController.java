@@ -1,10 +1,10 @@
 package com.shawn.video.controller;
 
+
 import com.shawn.video.pojo.Users;
 import com.shawn.video.pojo.vo.UsersVO;
 import com.shawn.video.service.UserService;
 import com.shawn.video.utils.JSONResult;
-import com.shawn.video.utils.MD5Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +28,10 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController extends BasicController {
 
+
+    @Autowired
+    private UserService userService;
+
     @ApiOperation(value = "用户上传头像", notes = "用户上传头像接口")
     @ApiImplicitParam(name="userId",value = "用户id",required = true,dataType = "String",paramType = "query")
     @PostMapping("/uploadFace")
@@ -37,7 +41,7 @@ public class UserController extends BasicController {
             return JSONResult.errorMsg("用户id不能为空...");
         }
         //文件保存的命名空间
-        String fileSpace = "F:/WechatDev/javaworkspace/gy_video";
+        String fileSpace = "F:/WechatDev/javaworkspace/wechat_resource/gy_video_face";
         //保存到数据库中的相对路径
         String uploadPathDB = "/" + userId + "/face";
         FileOutputStream fileOutputStream = null;
@@ -76,12 +80,27 @@ public class UserController extends BasicController {
                 }
             }
         }
-        return JSONResult.ok();
+        Users user = new Users();
+        user.setId(userId);
+        user.setFaceImage(uploadPathDB);
+        userService.updateUserInfo(user);
+        return JSONResult.ok(uploadPathDB);
 
     }
 
-    @Autowired
-    private UserService userService;
+    @ApiOperation(value = "查询用户信息", notes = "查询用户信息的接口 ")
+    @ApiImplicitParam(name="userId",value = "用户id",required = true,dataType = "String",paramType = "query")
+    @PostMapping("/query")
+    public JSONResult query(String userId){
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("用户id不能为空...");
+        }
+        Users user = userService.queryUserInfo(userId);
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(user,usersVO);
+        return JSONResult.ok(usersVO);
+    }
+
 
 
 }

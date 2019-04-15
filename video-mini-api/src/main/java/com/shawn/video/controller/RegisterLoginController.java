@@ -5,7 +5,6 @@ import com.shawn.video.pojo.vo.UsersVO;
 import com.shawn.video.service.UserService;
 import com.shawn.video.utils.JSONResult;
 import com.shawn.video.utils.MD5Utils;
-import com.shawn.video.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

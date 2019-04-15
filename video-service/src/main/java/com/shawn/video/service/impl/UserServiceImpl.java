@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * @Description TODO
@@ -51,5 +52,23 @@ public class UserServiceImpl implements UserService {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public void updateUserInfo(Users user) {
+        Example userExample = new Example(Users.class);
+        Example.Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id",user.getId());
+        usersMapper.updateByExampleSelective(user,userExample);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users queryUserInfo(String userId) {
+        Example userExample = new Example(Users.class);
+        Example.Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id",userId);
+        Users user = usersMapper.selectOneByExample(userExample);
+        return user;
     }
 }
