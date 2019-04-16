@@ -41,9 +41,9 @@ public class UserController extends BasicController {
             return JSONResult.errorMsg("用户id不能为空...");
         }
         //文件保存的命名空间
-        String fileSpace = "F:/WechatDev/javaworkspace/wechat_resource/gy_video_face";
+        String fileSpace = "F:/WechatDev/javaworkspace/wechat_resource";
         //保存到数据库中的相对路径
-        String uploadPathDB = "/" + userId + "/face";
+        String uploadPathDB = "/gy_video_face/" + userId + "/face";
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
         try {

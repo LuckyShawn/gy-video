@@ -16,4 +16,10 @@ public class BasicController {
     public RedisOperator redis;
 
     public static final String USER_REDIS_SESSION = "user-redis-session";
+
+    //文件保存命名空间
+    public static final String FILE_SAPCE = "F:/WechatDev/javaworkspace/wechat_resource";
+
+    //ffmpeg所在目录
+    String FFMPEG_EXE = "F:\\WechatDev\\Utils\\ffmpeg\\bin\\ffmpeg.exe";
 }

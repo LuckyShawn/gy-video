@@ -6,6 +6,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author shwan
+ * @Description //视频与背景音乐合并
+ * @Date 10:55 2019/4/16 0016
+ * @Param  ffmpeg.exe -i 11.mp4 -i 22.mp3 -t 5 -y 3.mp4
+ * @return
+ **/
 public class MergeVideoMp3 {
 
 	private String ffmpegEXE;
@@ -17,7 +24,7 @@ public class MergeVideoMp3 {
 	
 	public void convertor(String videoInputPath, String mp3InputPath,
 			double seconds, String videoOutputPath) throws Exception {
-//		ffmpeg.exe -i 苏州大裤衩.mp4 -i bgm.mp3 -t 7 -y 新的视频.mp4
+//		ffmpeg.exe -i 11.mp4 -i 22.mp3 -t 5 -y 33.mp4     11视频和22音频合成33.mp4
 		List<String> command = new ArrayList<>();
 		command.add(ffmpegEXE);
 		
@@ -33,9 +40,9 @@ public class MergeVideoMp3 {
 		command.add("-y");
 		command.add(videoOutputPath);
 		
-//		for (String c : command) {
-//			System.out.print(c + " ");
-//		}
+		for (String c : command) {
+			System.out.print(c + " ");
+		}
 		
 		ProcessBuilder builder = new ProcessBuilder(command);
 		Process process = builder.start();
@@ -61,9 +68,12 @@ public class MergeVideoMp3 {
 	}
 
 	public static void main(String[] args) {
-		MergeVideoMp3 ffmpeg = new MergeVideoMp3("C:\\ffmpeg\\bin\\ffmpeg.exe");
+		MergeVideoMp3 ffmpeg = new MergeVideoMp3("F:\\WechatDev\\Utils\\ffmpeg\\bin\\ffmpeg.exe");
 		try {
-			ffmpeg.convertor("C:\\苏州大裤衩.mp4", "C:\\music.mp3", 7.1, "C:\\这是通过java生产的视频.mp4");
+			ffmpeg.convertor("F:\\WechatDev\\Utils\\ffmpeg\\bin\\11.mp4",
+					"F:\\WechatDev\\Utils\\ffmpeg\\bin\\22.mp3",
+					5,
+					"F:\\WechatDev\\Utils\\ffmpeg\\bin\\33.avi");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
