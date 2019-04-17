@@ -21,5 +21,7 @@ public class BasicController {
     public static final String FILE_SAPCE = "F:/WechatDev/javaworkspace/wechat_resource";
 
     //ffmpeg所在目录
-    String FFMPEG_EXE = "F:\\WechatDev\\Utils\\ffmpeg\\bin\\ffmpeg.exe";
+    public static final String FFMPEG_EXE = "F:\\WechatDev\\Utils\\ffmpeg\\bin\\ffmpeg.exe";
+
+    public static final int PAGE_SIZE = 5;
 }

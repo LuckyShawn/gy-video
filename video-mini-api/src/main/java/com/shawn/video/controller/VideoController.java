@@ -12,11 +12,13 @@ import com.shawn.video.service.VideoService;
 import com.shawn.video.utils.FetchVideoCover;
 import com.shawn.video.utils.JSONResult;
 import com.shawn.video.utils.MergeVideoMp3;
+import com.shawn.video.utils.PagedResult;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -226,5 +228,19 @@ public class VideoController extends BasicController {
         return JSONResult.ok(videoId);
     }
 
+    /**
+     * 查询所有视频
+     * @param page
+     * @return
+     */
+    @ApiOperation(value = "查询所有视频", notes = "查询所有视频的接口")
+    @PostMapping("/showAll")
+    public JSONResult showAll(Integer page){
+        if(page == null){
+            page = 1;
+        }
 
+        PagedResult pagedResult = videoService.getAllVideo(page,PAGE_SIZE);
+        return JSONResult.ok(pagedResult);
+    }
 }

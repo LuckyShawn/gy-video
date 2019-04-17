@@ -3,6 +3,7 @@ package com.shawn.video.service;
 
 import com.shawn.video.pojo.Bgm;
 import com.shawn.video.pojo.Videos;
+import com.shawn.video.utils.PagedResult;
 
 import java.util.List;
 
@@ -27,5 +28,13 @@ public interface VideoService {
      * @return
      */
     void updateVideo(String videoId,String coverPath);
+
+    /**
+     * 分页查询视频列表
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedResult getAllVideo(Integer page, Integer pageSize);
 
 }
