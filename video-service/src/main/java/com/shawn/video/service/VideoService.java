@@ -35,6 +35,12 @@ public interface VideoService {
      * @param pageSize
      * @return
      */
-    PagedResult getAllVideo(Integer page, Integer pageSize);
+    PagedResult getAllVideo(Videos video,Integer isSaveRecord,Integer page, Integer pageSize);
 
+
+    /**
+     * 获取热搜词列表
+     * @return
+     */
+    List<String> getHotWords();
 }

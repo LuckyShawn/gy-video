@@ -19,10 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -235,12 +232,22 @@ public class VideoController extends BasicController {
      */
     @ApiOperation(value = "查询所有视频", notes = "查询所有视频的接口")
     @PostMapping("/showAll")
-    public JSONResult showAll(Integer page){
+    public JSONResult showAll(@RequestBody Videos video,Integer isSaveRecord, Integer page){
         if(page == null){
             page = 1;
         }
 
-        PagedResult pagedResult = videoService.getAllVideo(page,PAGE_SIZE);
+        PagedResult pagedResult = videoService.getAllVideo(video,isSaveRecord,page,PAGE_SIZE);
         return JSONResult.ok(pagedResult);
+    }
+
+    /**
+     * 热搜词获取
+     * @return
+     */
+    @ApiOperation(value = "查询所有视频", notes = "查询所有视频的接口")
+    @PostMapping("/hot")
+    public JSONResult showAll(){
+        return JSONResult.ok(videoService.getHotWords());
     }
 }

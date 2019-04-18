@@ -3,10 +3,12 @@ package com.shawn.video.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shawn.video.dao.BgmMapper;
+import com.shawn.video.dao.SearchRecordsMapper;
 import com.shawn.video.dao.VideosMapper;
 import com.shawn.video.dao.VideosMapperCustom;
 import com.shawn.video.idworker.Sid;
 import com.shawn.video.pojo.Bgm;
+import com.shawn.video.pojo.SearchRecords;
 import com.shawn.video.pojo.Videos;
 import com.shawn.video.pojo.vo.VideosVO;
 import com.shawn.video.service.BgmService;
@@ -36,8 +38,11 @@ public class VideoServiceImpl implements VideoService {
     private VideosMapperCustom videosMapperCustom;
 
     @Autowired
-    private Sid sid;
+    private SearchRecordsMapper searchRecordsMapper;
 
+    @Autowired
+    private Sid sid;
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public String saveVideo(Videos video) {
         String id = sid.nextShort();
@@ -45,7 +50,7 @@ public class VideoServiceImpl implements VideoService {
         videosMapper.insertSelective(video);
         return id;
     }
-
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public void updateVideo(String videoId, String coverPath) {
         Videos videos = new Videos();
@@ -54,11 +59,22 @@ public class VideoServiceImpl implements VideoService {
         videosMapper.updateByPrimaryKeySelective(videos);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedResult getAllVideo(Integer page, Integer pageSize) {
+    public PagedResult getAllVideo(Videos video,Integer isSaveRecord, Integer page, Integer pageSize) {
+
+        //保存热搜词
+        String desc = video.getVideoDesc();
+        if(isSaveRecord != null && isSaveRecord == 1){
+            SearchRecords searchRecords = new SearchRecords();
+            String recordId = sid.nextShort();
+            searchRecords.setId(recordId);
+            searchRecords.setContent(desc);
+            searchRecordsMapper.insert(searchRecords);
+        }
 
         PageHelper.startPage(page,pageSize);
-        List<VideosVO> list = videosMapperCustom.queryAllVideos(null,null);
+        List<VideosVO> list = videosMapperCustom.queryAllVideos(desc,null);
         PageInfo<VideosVO> pageList = new PageInfo<>(list);
         PagedResult result = new PagedResult();
         result.setPage(page);
@@ -67,6 +83,16 @@ public class VideoServiceImpl implements VideoService {
         result.setRecords(pageList.getTotal());
 
         return result;
+    }
+
+    /**
+     * 获取热词列表
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<String> getHotWords() {
+        return searchRecordsMapper.getHotwords();
     }
 
 }
