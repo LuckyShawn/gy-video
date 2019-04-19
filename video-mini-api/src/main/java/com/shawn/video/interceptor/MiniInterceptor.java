@@ -1,6 +1,8 @@
 package com.shawn.video.interceptor;
 
 
+import com.shawn.video.utils.JSONResult;
+import com.shawn.video.utils.JsonUtils;
 import com.shawn.video.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @Description 拦截器
@@ -31,22 +35,47 @@ public class MiniInterceptor implements HandlerInterceptor {
             String uniqueToken =  redis.get(USER_REDIS_SESSION + ":"+userId);
             if(StringUtils.isEmpty(uniqueToken) && StringUtils.isBlank(uniqueToken)){
                 System.out.println("请登录...");
+                returnErrorResponse(response,new JSONResult().errorTokenMsg("请登录..."));
+
                 return false;
             }else {
                 if(uniqueToken.equals(userToken)){
-                    System.out.println("帐号在别的手机端登录了...");
+                    System.out.println("帐号被挤出...");
+                    returnErrorResponse(response,new JSONResult().errorTokenMsg("帐号被挤出..."));
                     return false;
                 }
             }
 
             System.out.println("请求拦截...");
             return false;
+        }else{
+            returnErrorResponse(response,new JSONResult().errorTokenMsg("请登录..."));
         }
         /**
          * 返回false：请求被拦截，返回.
          * 返回true：请求ok，可以继续执行
          */
         return false;
+    }
+
+    /**
+     * 返回错误
+     * @param response
+     * @param result
+     * @throws IOException
+     */
+    public void returnErrorResponse(HttpServletResponse response , JSONResult result) throws IOException {
+        OutputStream out = null;
+        try {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/json");
+            out = response.getOutputStream();
+            out.write(JsonUtils.objectToJson(result).getBytes());
+        }finally {
+            if(out != null){
+                out.flush();
+            }
+        }
     }
 
     /**
