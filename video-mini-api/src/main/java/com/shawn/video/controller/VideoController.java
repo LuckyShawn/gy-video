@@ -250,4 +250,29 @@ public class VideoController extends BasicController {
     public JSONResult showAll(){
         return JSONResult.ok(videoService.getHotWords());
     }
+
+    /**
+     * 点赞
+     * @return
+     */
+    @ApiOperation(value = "点赞", notes = "点赞接口")
+    @PostMapping("/userLike")
+    public JSONResult userLike(String userId, String videoId, String videoCreaterId){
+        videoService.userLikeVideo(userId,videoId,videoCreaterId);
+
+        return JSONResult.ok(videoService.getHotWords());
+    }
+
+    /**
+     * 取消点赞
+     * @return
+     */
+    @ApiOperation(value = "取消点赞", notes = "取消点赞接口")
+    @PostMapping("/userUnLike")
+    public JSONResult userUnLike(String userId, String videoId, String videoCreaterId){
+        videoService.userUnLikeVideo(userId,videoId,videoCreaterId);
+        return JSONResult.ok(videoService.getHotWords());
+    }
+
+
 }

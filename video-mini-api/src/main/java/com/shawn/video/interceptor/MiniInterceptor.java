@@ -29,8 +29,8 @@ public class MiniInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        String userId = request.getHeader("userId");
-        String userToken = request.getHeader("userToken");
+        String userId = request.getHeader("headerUserId");
+        String userToken = request.getHeader("headerUserToken");
         if(StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(userToken)){
             String uniqueToken =  redis.get(USER_REDIS_SESSION + ":"+userId);
             if(StringUtils.isEmpty(uniqueToken) && StringUtils.isBlank(uniqueToken)){
@@ -39,23 +39,22 @@ public class MiniInterceptor implements HandlerInterceptor {
 
                 return false;
             }else {
-                if(uniqueToken.equals(userToken)){
+                if(!uniqueToken.equals(userToken)){
                     System.out.println("帐号被挤出...");
                     returnErrorResponse(response,new JSONResult().errorTokenMsg("帐号被挤出..."));
                     return false;
                 }
             }
-
-            System.out.println("请求拦截...");
-            return false;
         }else{
+
             returnErrorResponse(response,new JSONResult().errorTokenMsg("请登录..."));
+            return false;
         }
         /**
          * 返回false：请求被拦截，返回.
          * 返回true：请求ok，可以继续执行
          */
-        return false;
+        return true;
     }
 
     /**

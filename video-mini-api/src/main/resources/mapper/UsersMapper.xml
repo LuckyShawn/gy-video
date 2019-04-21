@@ -15,13 +15,15 @@
     <result column="receive_like_counts" property="receiveLikeCounts" jdbcType="INTEGER" />
   </resultMap>
   
-  
+  <!--获赞-->
   <update id="addReceiveLikeCount" parameterType="String">
-  	update users set receive_like_counts=receive_like_counts+1 where id=#{userId}
+  	update users set receive_like_counts=receive_like_counts+1
+  	where id=#{userId}
   </update>
-  
+    <!--取消赞-->
   <update id="reduceReceiveLikeCount" parameterType="String">
-  	update users set receive_like_counts=receive_like_counts-1 where id=#{userId}
+  	update users set receive_like_counts=receive_like_counts-1
+  	where id=#{userId}
   </update>
   
   

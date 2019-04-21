@@ -43,4 +43,15 @@ public interface VideoService {
      * @return
      */
     List<String> getHotWords();
+
+    /**
+     * 用户喜欢视频（点赞）
+     * @param userId
+     */
+    void userLikeVideo(String userId,String videoId,String videoCreaterId);
+    /**
+     * 用户不喜欢视频（取消点赞）
+     * @param userId
+     */
+    void userUnLikeVideo(String userId,String videoId,String videoCreaterId);
 }

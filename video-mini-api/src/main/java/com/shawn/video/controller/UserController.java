@@ -5,8 +5,10 @@ import com.shawn.video.pojo.Users;
 import com.shawn.video.pojo.vo.UsersVO;
 import com.shawn.video.service.UserService;
 import com.shawn.video.utils.JSONResult;
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -99,6 +101,26 @@ public class UserController extends BasicController {
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(user,usersVO);
         return JSONResult.ok(usersVO);
+    }
+
+    @ApiOperation(value = "查询发布者信息", notes = "查询发布者信息的接口 ")
+    @ApiImplicitParams({@ApiImplicitParam(name="loginUserId",value = "用户id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name="videoId",value = "视频id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name="publishId",value = "发布者id",required = true,dataType = "String",paramType = "query")
+            })
+    @PostMapping("/queryPublisher")
+    public JSONResult queryPublisher(String loginUserId,String videoId,String publishId){
+        //不可为空
+        if (StringUtils.isBlank(loginUserId) || StringUtils.isBlank(videoId) || StringUtils.isBlank(publishId)) {
+            return JSONResult.errorMsg("");
+        }
+        //1.查询视频发布者的信息
+        Users userInfo = userService.queryUserInfo(publishId);
+        UsersVO publisher = new UsersVO();
+        BeanUtils.copyProperties(userInfo,publisher);
+        //2.查询当前登陆者和视频的点赞关系
+
+        return JSONResult.ok(publisher);
     }
 
 
