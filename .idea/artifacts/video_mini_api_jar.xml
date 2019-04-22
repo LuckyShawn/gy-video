@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="video-mini-api:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/video_mini_api_jar</output-path>
+    <root id="archive" name="video-mini-api.jar">
+      <element id="module-output" name="video-mini-api" />
+      <element id="module-output" name="video-service" />
+      <element id="module-output" name="video-dao" />
+      <element id="module-output" name="video-pojo" />
+      <element id="module-output" name="video-common" />
+    </root>
+  </artifact>
+</component>

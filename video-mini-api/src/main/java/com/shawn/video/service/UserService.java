@@ -48,18 +48,18 @@ public interface UserService {
      * @param videoId
      * @return
      */
-    boolean isUserLikeVideo(String userId,String videoId);
+    boolean isUserLikeVideo(String userId, String videoId);
 
     /**
      * 增加用户和粉丝的关系
      * @param userId
      * @param fansId
      */
-    void saveUserFanRelation(String userId,String fansId);
+    void saveUserFanRelation(String userId, String fansId);
     /**
      * 删除用户和粉丝的关系
      * @param userId
      * @param fansId
      */
-    void deleteUserFanRelation(String userId,String fansId);
+    void deleteUserFanRelation(String userId, String fansId);
 }

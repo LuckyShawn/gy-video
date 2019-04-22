@@ -2,10 +2,10 @@ package com.shawn.video.controller;
 
 
 import com.shawn.video.pojo.Users;
+import com.shawn.video.pojo.vo.PublisherVideo;
 import com.shawn.video.pojo.vo.UsersVO;
 import com.shawn.video.service.UserService;
 import com.shawn.video.utils.JSONResult;
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.UUID;
+
 
 /**
  * @Description TODO
@@ -97,6 +97,9 @@ public class UserController extends BasicController {
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");
         }
+        if("undefined".equals(userId)){
+            return JSONResult.errorMsg("请登录！");
+        }
         Users user = userService.queryUserInfo(userId);
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(user,usersVO);
@@ -111,7 +114,7 @@ public class UserController extends BasicController {
     @PostMapping("/queryPublisher")
     public JSONResult queryPublisher(String loginUserId,String videoId,String publishId){
         //不可为空
-        if (StringUtils.isBlank(loginUserId) || StringUtils.isBlank(videoId) || StringUtils.isBlank(publishId)) {
+         if (StringUtils.isBlank(loginUserId) || StringUtils.isBlank(videoId) || StringUtils.isBlank(publishId)) {
             return JSONResult.errorMsg("");
         }
         //1.查询视频发布者的信息
@@ -119,10 +122,44 @@ public class UserController extends BasicController {
         UsersVO publisher = new UsersVO();
         BeanUtils.copyProperties(userInfo,publisher);
         //2.查询当前登陆者和视频的点赞关系
-
-        return JSONResult.ok(publisher);
+        boolean userLikeVideo = userService.isUserLikeVideo(loginUserId,videoId);
+        PublisherVideo bean = new PublisherVideo();
+        bean.setPublisher(publisher);
+        bean.setUserLikeVideo(userLikeVideo);
+        return JSONResult.ok(bean);
     }
 
+    /**
+     * 关注
+     * @param userId
+     * @param fansId
+     * @return
+     */
+    @PostMapping("/beYourFans")
+    public JSONResult beYourFans(String userId,String fansId){
+        if(StringUtils.isBlank(userId) || StringUtils.isBlank(fansId)){
+            return JSONResult.errorMsg("");
+        }
+        //保存用户关系
+        userService.saveUserFanRelation(userId,fansId);
 
+        return JSONResult.ok("关注成功!");
+    }
 
+    /**
+     * 取关
+     * @param userId
+     * @param fansId
+     * @return
+     */
+    @PostMapping("/notBeYourFans")
+    public JSONResult notBeYourFans(String userId,String fansId){
+        if(StringUtils.isBlank(userId) || StringUtils.isBlank(fansId)){
+            return JSONResult.errorMsg("");
+        }
+        //删除用户关系
+        userService.deleteUserFanRelation(userId,fansId);
+
+        return JSONResult.ok("取消关注成功...");
+    }
 }

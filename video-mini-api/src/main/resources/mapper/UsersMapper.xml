@@ -28,19 +28,19 @@
   
   
   
-  
+  <!--增加粉丝数量-->
   <update id="addFansCount" parameterType="String">
   	update users set fans_counts=fans_counts+1 where id=#{userId}
   </update>
-  
+    <!--减少粉丝数量-->
   <update id="reduceFansCount" parameterType="String">
   	update users set fans_counts=fans_counts-1 where id=#{userId}
   </update>
-  
+  <!--增加关注数量-->
   <update id="addFollersCount" parameterType="String">
   	update users set follow_counts=follow_counts+1 where id=#{userId}
   </update>
-  
+    <!--减少关注数量-->
   <update id="reduceFollersCount" parameterType="String">
   	update users set follow_counts=follow_counts-1 where id=#{userId}
   </update>
