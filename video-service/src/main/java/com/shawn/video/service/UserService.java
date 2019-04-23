@@ -62,4 +62,12 @@ public interface UserService {
      * @param fansId
      */
     void deleteUserFanRelation(String userId,String fansId);
+
+    /**
+     * 查询用户是否关注
+     * @param userId
+     * @param fansId
+     * @return
+     */
+    boolean queryIfFollow(String userId,String fansId);
 }

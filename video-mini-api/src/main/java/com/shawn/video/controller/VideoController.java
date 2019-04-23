@@ -227,17 +227,23 @@ public class VideoController extends BasicController {
 
     /**
      * 查询所有视频
+     * @param video
+     * @param isSaveRecord   1=保存  2=不保存
      * @param page
+     * @param pageSize
      * @return
      */
     @ApiOperation(value = "查询所有视频", notes = "查询所有视频的接口")
     @PostMapping("/showAll")
-    public JSONResult showAll(@RequestBody Videos video,Integer isSaveRecord, Integer page){
+    public JSONResult showAll(@RequestBody Videos video,Integer isSaveRecord, Integer page,Integer pageSize){
         if(page == null){
             page = 1;
         }
+        if(pageSize == null){
+            pageSize = PAGE_SIZE;
+        }
 
-        PagedResult pagedResult = videoService.getAllVideo(video,isSaveRecord,page,PAGE_SIZE);
+        PagedResult pagedResult = videoService.getAllVideo(video,isSaveRecord,page,pageSize);
         return JSONResult.ok(pagedResult);
     }
 
@@ -245,7 +251,7 @@ public class VideoController extends BasicController {
      * 热搜词获取
      * @return
      */
-    @ApiOperation(value = "查询所有视频", notes = "查询所有视频的接口")
+    @ApiOperation(value = "热搜词获取", notes = "热搜词获取的接口")
     @PostMapping("/hot")
     public JSONResult showAll(){
         return JSONResult.ok(videoService.getHotWords());

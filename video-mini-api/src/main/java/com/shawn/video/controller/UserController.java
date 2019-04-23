@@ -93,7 +93,7 @@ public class UserController extends BasicController {
     @ApiOperation(value = "查询用户信息", notes = "查询用户信息的接口 ")
     @ApiImplicitParam(name="userId",value = "用户id",required = true,dataType = "String",paramType = "query")
     @PostMapping("/query")
-    public JSONResult query(String userId){
+    public JSONResult query(String userId,String fansId){
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");
         }
@@ -103,6 +103,8 @@ public class UserController extends BasicController {
         Users user = userService.queryUserInfo(userId);
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(user,usersVO);
+
+        usersVO.setFollow(userService.queryIfFollow(userId,fansId));
         return JSONResult.ok(usersVO);
     }
 

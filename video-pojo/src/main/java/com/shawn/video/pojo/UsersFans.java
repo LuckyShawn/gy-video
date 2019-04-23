@@ -17,7 +17,7 @@ public class UsersFans {
      * 粉丝
      */
     @Column(name = "fan_id")
-    private String fanId;
+    private String fansId;
 
     /**
      * @return id
@@ -56,16 +56,16 @@ public class UsersFans {
      *
      * @return fan_id - 粉丝
      */
-    public String getFanId() {
-        return fanId;
+    public String getFansId() {
+        return fansId;
     }
 
     /**
      * 设置粉丝
      *
-     * @param fanId 粉丝
+     * @param fansId 粉丝
      */
-    public void setFanId(String fanId) {
-        this.fanId = fanId;
+    public void setFansId(String fansId) {
+        this.fansId = fansId;
     }
 }

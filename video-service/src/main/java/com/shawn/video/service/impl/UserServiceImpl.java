@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
         UsersFans usersFans = new UsersFans();
         usersFans.setId(sid.nextShort());
         usersFans.setUserId(userId);
-        usersFans.setFanId(fansId);
+        usersFans.setFansId(fansId);
         usersFansMapper.insert(usersFans);
         //增加粉丝数
         usersMapper.addFansCount(userId);
@@ -138,6 +138,26 @@ public class UserServiceImpl implements UserService {
         usersFansMapper.deleteByExample(userExample);
         usersMapper.reduceFansCount(userId);
         usersMapper.reduceFollersCount(fansId);
+    }
+
+    /**
+     * 查询是否关注
+     * @param userId
+     * @param fansId
+     * @return
+     */
+    @Override
+    public boolean queryIfFollow(String userId, String fansId) {
+        Example example = new Example(UsersFans.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("fansId",fansId);
+        List<UsersFans> list = usersFansMapper.selectByExample(example);
+        if(list != null && !list.isEmpty() && list.size() > 0){
+            return true;
+        }
+        return false;
     }
 
 
