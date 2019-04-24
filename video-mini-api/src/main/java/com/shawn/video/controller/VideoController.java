@@ -280,5 +280,46 @@ public class VideoController extends BasicController {
         return JSONResult.ok(videoService.getHotWords());
     }
 
+    /**
+     * 显示用户喜欢(点赞过)的视频
+     * @param userId
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @PostMapping("/showMyLike")
+    public JSONResult showMyLike(String userId,Integer page,Integer pageSize){
+        if(StringUtils.isBlank(userId)){
+            return JSONResult.ok();
+        }
+        if(page == null){
+            page = 1;
+        }
+        if(pageSize == null){
+            pageSize = 6;
+        }
+
+        PagedResult videoList = videoService.queryMyLikeVideos(userId,page,pageSize);
+        return JSONResult.ok(videoList);
+    }
+
+    /**
+     * 我关注的人发的视频
+     * @param userId
+     * @param page
+     * @return
+     */
+    @PostMapping("/showMyFollow")
+    public JSONResult showMyFollow(String userId,Integer page){
+        if(StringUtils.isBlank(userId)){
+            return JSONResult.ok();
+        }
+        if(page == null){
+            page = 1;
+        }
+        int pageSize = 6;
+        PagedResult videoList = videoService.queryMyFollowVideos(userId,page,pageSize);
+        return JSONResult.ok(videoList);
+    }
 
 }

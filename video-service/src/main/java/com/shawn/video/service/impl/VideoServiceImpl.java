@@ -67,6 +67,7 @@ public class VideoServiceImpl implements VideoService {
 
         //保存热搜词
         String desc = video.getVideoDesc();
+        String userId = video.getUserId();
         if(isSaveRecord != null && isSaveRecord == 1){
             SearchRecords searchRecords = new SearchRecords();
             String recordId = sid.nextShort();
@@ -76,7 +77,7 @@ public class VideoServiceImpl implements VideoService {
         }
 
         PageHelper.startPage(page,pageSize);
-        List<VideosVO> list = videosMapperCustom.queryAllVideos(desc,null);
+        List<VideosVO> list = videosMapperCustom.queryAllVideos(desc,userId);
         PageInfo<VideosVO> pageList = new PageInfo<>(list);
         PagedResult result = new PagedResult();
         result.setPage(page);
@@ -114,6 +115,7 @@ public class VideoServiceImpl implements VideoService {
         usersMapper.addReceiveLikeCount(videoCreaterId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void userUnLikeVideo(String userId, String videoId, String videoCreaterId) {
         //1.删除用户和视频的喜欢点赞关联关系表
@@ -130,4 +132,35 @@ public class VideoServiceImpl implements VideoService {
         usersMapper.reduceReceiveLikeCount(videoCreaterId);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedResult queryMyLikeVideos(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<VideosVO> videosVOS = videosMapperCustom.queryMyLikeVideos(userId);
+
+        PageInfo<VideosVO> pageList = new PageInfo<>(videosVOS);
+        PagedResult pagedResult = new PagedResult();
+        pagedResult.setTotal(pageList.getPages());
+        pagedResult.setRows(videosVOS);
+        pagedResult.setPage(page);
+        pagedResult.setRecords(pageList.getTotal());
+
+        return pagedResult;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedResult queryMyFollowVideos(String userId, Integer page, Integer pageSize) {
+
+        PageHelper.startPage(page,pageSize);
+        List<VideosVO> videosVOS = videosMapperCustom.queryMyFollowVideos(userId);
+
+        PageInfo<VideosVO> pageList = new PageInfo<>(videosVOS);
+        PagedResult pagedResult = new PagedResult();
+        pagedResult.setTotal(pageList.getPages());
+        pagedResult.setRows(videosVOS);
+        pagedResult.setPage(page);
+        pagedResult.setRecords(pageList.getTotal());
+        return pagedResult;
+    }
 }

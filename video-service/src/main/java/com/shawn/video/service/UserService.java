@@ -1,6 +1,7 @@
 package com.shawn.video.service;
 
 import com.shawn.video.pojo.Users;
+import com.shawn.video.pojo.UsersReport;
 
 /**
  * @Description TODO
@@ -70,4 +71,10 @@ public interface UserService {
      * @return
      */
     boolean queryIfFollow(String userId,String fansId);
+
+    /**
+     * 举报用户
+     * @param usersReport
+     */
+    void reportUser(UsersReport usersReport);
 }

@@ -3,10 +3,12 @@ package com.shawn.video.service.impl;
 import com.shawn.video.dao.UsersFansMapper;
 import com.shawn.video.dao.UsersLikeVideosMapper;
 import com.shawn.video.dao.UsersMapper;
+import com.shawn.video.dao.UsersReportMapper;
 import com.shawn.video.idworker.Sid;
 import com.shawn.video.pojo.Users;
 import com.shawn.video.pojo.UsersFans;
 import com.shawn.video.pojo.UsersLikeVideos;
+import com.shawn.video.pojo.UsersReport;
 import com.shawn.video.service.UserService;
 import com.shawn.video.utils.MD5Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private Sid sid;
+
+    @Autowired
+    private UsersReportMapper usersReportMapper;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -158,6 +164,20 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 举报用户
+     * @param usersReport
+     */
+    @Override
+    public void reportUser(UsersReport usersReport) {
+
+        usersReport.setId(sid.nextShort());
+        usersReport.setCreateDate(new Date());
+
+        usersReportMapper.insert(usersReport);
+
     }
 
 

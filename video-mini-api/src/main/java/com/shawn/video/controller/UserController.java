@@ -2,6 +2,7 @@ package com.shawn.video.controller;
 
 
 import com.shawn.video.pojo.Users;
+import com.shawn.video.pojo.UsersReport;
 import com.shawn.video.pojo.vo.PublisherVideo;
 import com.shawn.video.pojo.vo.UsersVO;
 import com.shawn.video.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import java.io.*;
 
@@ -163,5 +165,14 @@ public class UserController extends BasicController {
         userService.deleteUserFanRelation(userId,fansId);
 
         return JSONResult.ok("取消关注成功...");
+    }
+
+    @PostMapping("/reportUser")
+    public JSONResult reportUser(@RequestBody UsersReport usersReport){
+
+        //保存举报信息
+        userService.reportUser(usersReport);
+
+        return JSONResult.errorMsg("举报成功...");
     }
 }
