@@ -4,12 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shawn.video.dao.*;
 import com.shawn.video.idworker.Sid;
+import com.shawn.video.pojo.Comments;
 import com.shawn.video.pojo.SearchRecords;
 import com.shawn.video.pojo.UsersLikeVideos;
 import com.shawn.video.pojo.Videos;
+import com.shawn.video.pojo.vo.CommentsVO;
 import com.shawn.video.pojo.vo.VideosVO;
 import com.shawn.video.service.VideoService;
 import com.shawn.video.utils.PagedResult;
+import com.shawn.video.utils.TimeAgoUtils;
+import groovy.util.logging.Commons;
+import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,6 +23,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,11 +45,19 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private UsersLikeVideosMapper usersLikeVideosMapper;
+
     @Autowired
     private UsersMapper usersMapper;
 
     @Autowired
+    private CommentsMapper commentsMapper;
+
+    @Autowired
+    private  CommentsMapperCustom commentsMapperCustom;
+
+    @Autowired
     private Sid sid;
+
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public String saveVideo(Videos video) {
@@ -162,5 +176,34 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setPage(page);
         pagedResult.setRecords(pageList.getTotal());
         return pagedResult;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void saveComment(Comments comment) {
+        comment.setId(sid.nextShort());
+        comment.setCreateTime(new Date());
+
+        commentsMapper.insert(comment);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedResult getAllComments(String videoId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+
+        List<CommentsVO> list = commentsMapperCustom.queryComments(videoId);
+        //将发布时间转换成  1分钟前，1天前...
+        for (CommentsVO commentsVO : list){
+            String timeAgo = TimeAgoUtils.format(commentsVO.getCreateTime());
+            commentsVO.setTimeAgoStr(timeAgo);
+        }
+        PageInfo<CommentsVO> pageList = new PageInfo<>(list);
+        PagedResult result = new PagedResult();
+        result.setTotal(pageList.getPages());   //总页数
+        result.setPage(page);       //当前页
+        result.setRows(list);       //内容
+        result.setRecords(pageList.getTotal()); //总条数
+        return result;
     }
 }

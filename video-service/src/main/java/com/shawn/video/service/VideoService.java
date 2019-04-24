@@ -2,6 +2,7 @@ package com.shawn.video.service;
 
 
 import com.shawn.video.pojo.Bgm;
+import com.shawn.video.pojo.Comments;
 import com.shawn.video.pojo.Videos;
 import com.shawn.video.utils.PagedResult;
 
@@ -72,4 +73,19 @@ public interface VideoService {
      * @return
      */
     PagedResult queryMyFollowVideos(String userId,Integer page,Integer pageSize);
+
+    /**
+     * 保存评论
+     * @param comment
+     */
+    void saveComment(Comments comment);
+
+    /**
+     * 获取视频评论列表
+     * @param videoId
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedResult getAllComments(String videoId,Integer page,Integer pageSize);
 }

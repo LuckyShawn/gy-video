@@ -1,8 +1,11 @@
 package com.shawn.video.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.core.json.JsonReadContext;
 import com.shawn.video.Enums.VideoStatusEnum;
 import com.shawn.video.pojo.Bgm;
+import com.shawn.video.pojo.Comments;
 import com.shawn.video.pojo.Users;
 import com.shawn.video.pojo.Videos;
 import com.shawn.video.pojo.vo.UsersVO;
@@ -322,4 +325,45 @@ public class VideoController extends BasicController {
         return JSONResult.ok(videoList);
     }
 
+    /**
+     * 发布评论
+     * @param comment
+     * @return
+     */
+    @PostMapping("/saveComment")
+    public JSONResult saveComment(@RequestBody Comments comment,String fatherCommentId,String toUserId){
+        if(StringUtils.isNotBlank(fatherCommentId) && StringUtils.isNotBlank(toUserId)){
+            comment.setFatherCommentId(fatherCommentId);
+            comment.setToUserId(toUserId);
+        }
+        videoService.saveComment(comment);
+
+        return JSONResult.ok();
+    }
+
+
+    /**
+     * 获取视频评论列表
+     * @param videoId
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @PostMapping("/getVideoComments")
+    public JSONResult getVideoComments(String videoId,Integer page,Integer pageSize){
+        if(StringUtils.isBlank(videoId)){
+            return JSONResult.ok();
+        }
+        //分页查询评论列表，时间顺序倒序排序
+        if(page == null){
+            page = 1;
+        }
+        if(pageSize == null){
+            pageSize = 10;
+        }
+
+        PagedResult list = videoService.getAllComments(videoId,page,pageSize);
+
+        return JSONResult.ok(list);
+    }
 }
