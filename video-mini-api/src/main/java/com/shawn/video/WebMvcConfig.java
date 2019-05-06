@@ -23,6 +23,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .addResourceLocations("file:F:/WechatDev/javaworkspace/wechat_resource/");
     }
 
+    @Bean(initMethod = "init")
+    public ZKCuratorClient zkCuratorClient(){
+        return new ZKCuratorClient();
+    }
+
     @Bean
     public MiniInterceptor miniInterceptor(){
         return new MiniInterceptor();
