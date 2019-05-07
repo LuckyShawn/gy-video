@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="video-mini-api:war">
+    <output-path>$PROJECT_DIR$/video-mini-api/target</output-path>
+    <root id="archive" name="gy_video.war">
+      <element id="artifact" artifact-name="video-mini-api:war exploded" />
+    </root>
+  </artifact>
+</component>

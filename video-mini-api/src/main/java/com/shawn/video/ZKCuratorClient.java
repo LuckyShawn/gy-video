@@ -74,7 +74,7 @@ public class ZKCuratorClient {
                     log.info("监听到事件：CHILD_ADDED");
                     //1. 从数据库查询bgm对象，获取路径path
                     String path = event.getData().getPath();
-                    String operatorObjStr = new String (event.getData().getData());
+                     String operatorObjStr = new String (event.getData().getData());
                     //json转成map
                     Map<String,String> map = JsonUtils.jsonToPojo(operatorObjStr,Map.class);
                     String operatorType = map.get("operType");
