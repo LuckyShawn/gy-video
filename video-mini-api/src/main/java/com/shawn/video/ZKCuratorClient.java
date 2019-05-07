@@ -1,7 +1,6 @@
 package com.shawn.video;
 
 import com.shawn.video.Enums.BGMOperatorTypeEnum;
-import com.shawn.video.Enums.VideoStatusEnum;
 import com.shawn.video.cofig.ResourceConfig;
 import com.shawn.video.service.BgmService;
 import com.shawn.video.utils.JsonUtils;
