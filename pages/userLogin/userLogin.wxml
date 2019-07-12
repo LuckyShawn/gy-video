@@ -1,6 +1,6 @@
 <view>
     <view class="login-icon">
-        <image class="login-img" src="../resource/images/dsp.jpg"></image>
+        <image class="login-img" src="../resource/images/index.jpg"></image>
     </view>
     <view class="login-from">
         <form bindsubmit='doLogin'>
