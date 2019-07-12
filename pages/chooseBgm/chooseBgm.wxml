@@ -1,0 +1,26 @@
+<view>
+    <form bindsubmit='upload'>
+
+        <radio-group name="bgmId">
+<!-- 存在bug，不是单独播放 -->
+<!-- style='width:300px' 控制bgm名字过长 -->
+          <block wx:for="{{bgmList}}" >
+            <view class='container' >
+          <audio id='{{item.id}}' bindtap="bindplay"  name="{{item.name}}" author="{{item.author}}" src="{{serverUrl}}{{item.path}}" style='width:300px' controls loop poster="http://localhost:8081/gy_video_bgm/bgm.jpg"></audio>
+          <radio style='margin-top:20px;' value='{{item.id}}'></radio>
+        </view>
+          </block>
+
+        </radio-group>
+
+        <view class="inputView">
+            <label class="loginLabel">视频描述：</label>
+            <input name="desc" class="inputText" placeholder="说点什么吧" />
+        </view>
+
+        <!-- 提交 -->
+        <button class="submitBtn" type="primary" form-type='submit'>上传视频</button>
+        
+        <button class="gobackBtn" type="warn" form-type='reset'>重置</button>
+    </form>
+</view>

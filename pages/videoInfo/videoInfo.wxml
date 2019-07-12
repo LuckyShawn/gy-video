@@ -1,0 +1,106 @@
+<!-- muted 是否静音 -->
+<!-- initial-time 初始播放秒数 -->
+<!-- duration 指定视频长度 -->
+<!-- controls  是否显示默认播放控件（播放/暂停按钮、播放进度、时间）-->
+<!-- danmu-list 弹幕列表  danmu-btn 弹幕按钮 enable-danmu 是否展示弹幕-->
+<!-- autoplay 是否自动播放 loop 是否循环播放 -->
+<!-- page-gesture 在非全屏模式下，是否开启亮度与音量调节手势 -->
+<!-- direction 设置全屏时视频的方向，不指定则根据宽高比自动判断 -->
+<!-- show-progress 若不设置，宽度大于240时才会显示 -->
+<!-- show-fullscreen-btn 是否显示全屏按钮 -->
+<!-- show-play-btn 是否显示视频底部控制栏的播放按钮 -->
+<!-- show-center-play-btn 是否显示视频中间的播放按钮 -->
+<!-- enable-progress-gesture 是否开启控制进度的手势 -->
+<!-- poster 视频封面的图片网络资源地址或云文件ID -->
+<!-- show-mute-btn 是否显示静音按钮 title 视频的标题，全屏时在顶部展示 -->
+<!-- enable-play-gesture 	是否开启播放手势，即双击切换播放/暂停 -->
+<view id="myVideo" style='width:100%;height:100%;'>
+  <video style='width:100%;height:100%;' src='{{src}}' muted='{{false}}' initial-time='0' autoplay='{{true}}' controls='{{false}}' enable-progress-gesture='{{false}}' loop='{{true}}' objectFit='{{cover}}'>
+
+    <cover-view class='container'>
+      <!-- 上传视频 -->
+
+      <cover-image src='../resource/images/camera.png' style='width:50rpx;height:50rpx;' bindtap='upload'></cover-image>
+
+
+      <!-- 搜索按钮 -->
+      <cover-image src='../resource/images/search.png' style='width:45rpx;height:45rpx;' bindtap='showSearch'></cover-image>
+
+    </cover-view>
+
+
+    <cover-view class='container-me'>
+      <!-- 头像 -->
+      <cover-image class="face" src='{{serverUrl}}{{publisher.faceImage}}' bindtap='showPublisher'></cover-image>
+
+
+      <!-- 喜欢收藏按钮 -->
+      <block wx:if="{{userLikeVideo}}">
+        <cover-image class="size-me" src='../resource/images/like.png' style='margin-top:30rpx;' bindtap='likeVideoOrNot'></cover-image>
+      </block>
+      <block wx:else>
+        <cover-image class="size-me" src='../resource/images/unlike.png' style='margin-top:30rpx;' bindtap='likeVideoOrNot'></cover-image>
+      </block>
+
+
+      <!-- 评论按钮 -->
+      <cover-image class="size-me" src='../resource/images/comments.png' style='margin-top:30rpx;' bindtap='leaveComment'></cover-image>
+
+      <!-- 分享按钮 -->
+      <cover-image class="size-me" src='../resource/images/share.png' style='margin-top:30rpx;' bindtap='shareMe'></cover-image>
+
+    </cover-view>
+
+    <cover-view class='container-words'>
+
+      <cover-view>@{{publisher.nickname}}</cover-view>
+
+      <cover-view class='video-desc'>{{videoInfo.videoDesc}}</cover-view>
+
+    </cover-view>
+    <cover-view class='container-bottom'>
+      <!-- 首页按钮 -->
+      <cover-image class='' src='../resource/images/index.png' class="size-bottom" bindtap='showIndex'></cover-image>
+      <!-- 我的关注 -->
+      <!-- <cover-image class='' src='../resource/images/follow.png' class="size-bottom" bindtap='showFollow'></cover-image> -->
+      <!-- 我的按钮 -->
+      <cover-image class='' src='../resource/images/mine.png' class="size-bottom" bindtap='showMine'></cover-image>
+
+    </cover-view>
+  </video>
+
+
+</view>
+
+<view>
+
+  <view class="saySthView">
+    <input name="commentContent" class="saySth" placeholder="{{placeholder}}" confirm-type="send" bindconfirm="saveComment" focus='{{commentFocus}}' value='{{contentValue}}' data-replyFatherCommentId='{{replyFatherCommentId}}' data-replyToUserId='{{replyToUserId}}'
+    />
+  </view>
+
+
+  <block wx:for="{{commentsList}}">
+    <!-- 回复 -->
+    <view class='comments-all' bindtap='replyFocus' data-fatherCommentId='{{item.id}}' data-toUserId='{{item.fromUserId}}' data-toNickname='{{item.nickname}}'>
+      <view class='container-comments'>
+        <image class="face-comments" src='{{serverUrl}}{{item.faceImage}}'></image>
+        <view class='nickname-comments'>
+          <label class='nickname-lbl'>@{{item.nickname}}</label>
+          于
+          <label class='date-lbl'>{{item.timeAgoStr}}</label>
+          <!-- 留言： -->
+          <block wx:if="{{item.toNickname != null}}">
+            回复
+            <label class='nickname-lbl'>@{{item.toNickname}}</label>
+          </block>
+          <block wx:else>
+            留言：
+          </block>
+        </view>
+      </view>
+      <view class='comments-content'>{{item.comment}}</view>
+    </view>
+  </block>
+
+</view>
